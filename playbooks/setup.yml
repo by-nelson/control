@@ -1,0 +1,7 @@
+---
+- name: setup.yml
+  hosts: all
+  gather_facts: yes
+
+  roles:
+    - role: python3-install
