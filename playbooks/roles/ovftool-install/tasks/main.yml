@@ -1,0 +1,21 @@
+---
+# tasks file for ovftool-install
+- name: Download ovftool
+  block:
+    - name: Create downloads directory
+      ansible.builtin.file:
+        path: /home/{{ ansible_user }}/Downloads
+        state: directory
+        mode: '0755'
+
+    - name: Download ovftool zip file
+      ansible.builtin.get_url:
+        url: https://github.com/rgl/ovftool-binaries/raw/main/archive/VMware-ovftool-4.5.0-20459872-lin.x86_64.zip
+        dest: /home/{{ ansible_user }}/Downloads/ovftool.zip
+        checksum: md5:7f385e0840f4bb87c544ba57469750d1
+
+    - name: Extract zip file
+      ansible.builtin.unarchive:
+        src: /home/{{ ansible_user }}/Downloads/ovftool.zip
+        dest: /home/{{ ansible_user}}/Downloads
+        remote_src: yes

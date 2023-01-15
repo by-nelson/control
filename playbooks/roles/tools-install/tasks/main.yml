@@ -1,0 +1,40 @@
+---
+# tasks file for tools-install
+- name: Gather the packages facts
+  ansible.builtin.package_facts:
+    manager: auto
+
+- name: Install packages
+  ansible.builtin.package:
+    name: "{{ item }}"
+    state: latest
+  with_items:
+    - yum-utils
+    - xorriso
+
+- name: Install Terraform
+  block:
+    - name: Add Official HashiCorp Linux repo
+      ansible.builtin.command:
+        cmd: "sudo yum-config-manager --add-repo https://rpm.releases.hashicorp.com/RHEL/hashicorp.repo"
+
+    - name: Install terraform from the new repo
+      ansible.builtin.yum:
+        name: terraform
+        state: latest
+  when: "'terraform' not in ansible_facts.packages"
+  become: yes
+
+- name: Install Packer
+  block:
+    - name: Add Official HashiCorp Linux repo
+      ansible.builtin.command:
+        cmd: "sudo yum-config-manager --add-repo https://rpm.releases.hashicorp.com/RHEL/hashicorp.repo"
+
+    - name: Install packer from the new repo
+      ansible.builtin.yum:
+        name: packer-1.8.2
+        state: present
+  when: "'packer' not in ansible_facts.packages"
+  become: yes
+

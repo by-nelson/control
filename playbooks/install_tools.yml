@@ -1,0 +1,29 @@
+---
+- name: setup.yml
+  hosts: localhost
+  connection: local
+  gather_facts: yes
+
+  roles:
+    - role: python3-install
+    - role: ovftool-install
+
+  post_tasks:
+    - name: Update pip3
+      ansible.builtin.command:
+        cmd: "/usr/local/bin/python3.10 -m pip install --upgrade pip"
+
+    - name: Add python3 symbolic link
+      ansible.builtin.file:
+        src: "/usr/local/bin/python3.10"
+        dest: "/usr/bin/python3"
+        state: link
+      become: yes
+
+    - name: Update Ansible
+      ansible.builtin.command:
+        cmd: "python{{ python3_version | regex_search('3\\.[0-9]+') }} -m pip install --user ansible-core==2.12.4"
+
+    - name: Reload table
+      ansible.builtin.shell:
+        cmd: "hash -r"
