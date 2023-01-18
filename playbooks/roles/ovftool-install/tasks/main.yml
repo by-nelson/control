@@ -17,5 +17,5 @@
     - name: Extract zip file
       ansible.builtin.unarchive:
         src: /home/{{ ansible_user }}/Downloads/ovftool.zip
-        dest: /home/{{ ansible_user}}/Downloads
+        dest: /home/{{ ansible_user }}/Downloads
         remote_src: yes

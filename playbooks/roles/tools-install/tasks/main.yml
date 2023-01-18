@@ -11,6 +11,7 @@
   with_items:
     - yum-utils
     - xorriso
+  become: yes
 
 - name: Install Terraform
   block:
